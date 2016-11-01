@@ -1,0 +1,25 @@
+{
+  "name": "js-and-rest",
+  "version": "1.0.0",
+  "description": "Nerd School, JS and REST",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joakimgk/JS-and-REST.git"
+  },
+  "keywords": [
+    "rest",
+    "http",
+    "web",
+    "fun"
+  ],
+  "author": "Joakim Knudsen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joakimgk/JS-and-REST/issues"
+  },
+  "homepage": "https://github.com/joakimgk/JS-and-REST#readme"
+}
