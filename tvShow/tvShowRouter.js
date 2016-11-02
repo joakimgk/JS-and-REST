@@ -1,8 +1,9 @@
 const express = require('express');
-
+/*
 // When we import local modules we use the filename sans the extension:
 // TvShow.js -> require('TvShow'):
 const TvShow = require('./TvShow');
+*/
 const tvserv = require('./tvShowService');
 
 // create a new instance of an Express routerS
@@ -25,6 +26,11 @@ tvShowRouter.get('/', function(request, response) {
   // .sjon() means: take my tvShows array, parse it to json,
   // and set it as my response's body (aka the response data)
   response.json(tvShows);
+});
+
+tvShowRouter.get('/:tvShowId', function(request, response) {
+  console.log("ID: " + request.params.tvShowId);
+  console.log("gives: " + tvserv.getById(request.params.tvShowId));
 });
 
 // Remember to export the router
