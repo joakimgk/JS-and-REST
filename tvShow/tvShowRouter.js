@@ -17,7 +17,7 @@ const tvShows = [
 ];
 */
 //const myService = new tvserv();
-let tvShows = tvserv.getAll();
+//let tvShows = tvserv.getAll();
 
 // make a route for fetching all TV shows
 // GET /tvshow
@@ -25,12 +25,13 @@ let tvShows = tvserv.getAll();
 tvShowRouter.get('/', function(request, response) {
   // .sjon() means: take my tvShows array, parse it to json,
   // and set it as my response's body (aka the response data)
-  response.json(tvShows);
+  console.log("\n\nget('/')");
+  response.json(tvserv.getAll());
 });
 
 tvShowRouter.get('/:tvShowId', function(request, response) {
-  console.log("ID: " + request.params.tvShowId);
-  console.log("gives: " + tvserv.getById(request.params.tvShowId));
+  console.log("\n\nget('/:tvShowId'), ID: " + request.params.tvShowId);
+  response.json(tvserv.getById(request.params.tvShowId));
 });
 
 // Remember to export the router

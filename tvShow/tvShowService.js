@@ -11,25 +11,35 @@ const TvShow = require('./TvShow');
 class TvShowService {
   constructor() {
     this.tvShows = [
-        new TvShow(1, 'Mr.Robot', 'Drama'),
-        new TvShow(2, 'Black Mirror', 'Drama')
+        new TvShow('1', 'Mr.Robot', 'Drama'),
+        new TvShow('2', 'Black Mirror', 'Drama')
       ];
   }
 
   getAll() {
+    console.log("getAll()");
     return this.tvShows;
   }
 
-  getById(id) {
+  getById_old(id) {
+    console.log("getById_old(" + id + ")");
     for (var i = 0; i < this.tvShows.length; i++) {
-      if (this.tvShows.id === id) return this.tvShows[i];
+      if (this.tvShows[i].id === id) {
+        return this.tvShows[i];
+      }
       //var tvshow = this.tvShows[i]
       //this.findShow(tvShow, id);
     }
-    return null
+    return null;
   }
 
-  // hjelpefunksjon:
+  // uses ES6 find() to return show by ID
+  getById(id) {
+    console.log("getById(" + id + ")");
+    return this.tvShows.find(show => show.id === id);
+  }
+
+  // hjelpefunksjon: invoked on each object of tvShows[]
   findShow(tvshow) {
 
   }
