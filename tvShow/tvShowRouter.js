@@ -43,6 +43,12 @@ tvShowRouter.post('/', function(request, response) {
   response.send(newTvShow);
 });
 
+// DELETE /tvshow/:id
+tvShowRouter.delete('/:tvShowId', function(request, response) {
+  console.log("\n\ndelete('tvshow/:tvShowId'), ID: " + request.params.tvShowId);
+  tvserv.deleteShow(request.params.tvShowId);
+});
+
 // Remember to export the router
 // so it's possible to require() it from other modules.
 module.exports = tvShowRouter;
