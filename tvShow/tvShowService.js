@@ -11,9 +11,11 @@ const TvShow = require('./TvShow');
 class TvShowService {
   constructor() {
     this.tvShows = [
-        new TvShow('1', 'Mr.Robot', 'Drama'),
-        new TvShow('2', 'Black Mirror', 'Drama')
+        new TvShow(1, 'Mr.Robot', 'Drama'),
+        new TvShow(2, 'Black Mirror', 'Drama')
       ];
+
+    this.nextid = this.tvShows.length +1;
   }
 
   getAll() {
@@ -30,18 +32,23 @@ class TvShowService {
       //var tvshow = this.tvShows[i]
       //this.findShow(tvShow, id);
     }
+    console.log("NO MATCH");
     return null;
   }
 
   // uses ES6 find() to return show by ID
   getById(id) {
     console.log("getById(" + id + ")");
-    return this.tvShows.find(show => show.id === id);
+    let result = this.tvShows.find(show => show.id == id);
+    if (result) return result;
+    else     console.log("NO MATCH");
   }
 
-  // hjelpefunksjon: invoked on each object of tvShows[]
-  findShow(tvshow) {
-
+  addShow(navn, genre) {
+    this.tvShows[this.nextid-1] = new TvShow(this.nextid, navn, genre);
+    console.log('addShow(' + navn + ', ' + genre + ') lagt til med id ' + this.nextid);
+    this.nextid++;
+    return this.getById(this.nextid-1);
   }
 }
 
