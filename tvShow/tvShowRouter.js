@@ -37,17 +37,21 @@ tvShowRouter.get('/:tvShowId', function(request, response) {
 });
 
 // POST /tvshow
-tvShowRouter.post('/', function(request, response) {
-  console.log("\n\npost('tvshow/'): " + request.body.navn + ", " + request.body.genre );
-  const newTvShow = tvserv.addShow(request.body.navn, request.body.genre);
-  response.send(newTvShow);
-});
+tvShowRouter
 
-// DELETE /tvshow/:id
-tvShowRouter.delete('/:tvShowId', function(request, response) {
-  console.log("\n\ndelete('tvshow/:tvShowId'), ID: " + request.params.tvShowId);
-  tvserv.deleteShow(request.params.tvShowId);
-});
+  .post('/', function(request, response) {
+      console.log("\n\npost('tvshow/'): " + request.body.action + " "
+       + request.body.navn + ", " + request.body.genre );
+      const newTvShow = tvserv.addShow(request.body.navn, request.body.genre);
+      //response.send(newTvShow);
+      response.redirect('/tvShows.html');
+    })
+  // DELETE /tvshow/:id
+  .delete('/:tvShowId', function(request, response) {
+      console.log("\n\ndelete('tvshow/:tvShowId'), ID: " + request.params.tvShowId);
+      tvserv.deleteShow(request.params.tvShowId);
+      response.send('/tvShows.html');
+    });
 
 // Remember to export the router
 // so it's possible to require() it from other modules.

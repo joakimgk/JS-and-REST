@@ -39,16 +39,30 @@ class TvShowService {
   // uses ES6 find() to return show by ID
   getById(id) {
     console.log("getById(" + id + ")");
-    let result = this.tvShows.find(show => show.id == id);
+    let result = this.tvShows.find(show =>
+        (show === undefined ? null : show.id) == id);
     if (result) return result;
     else     console.log("NO MATCH");
   }
 
   addShow(navn, genre) {
-    this.tvShows[this.nextid-1] = new TvShow(this.nextid, navn, genre);
-    console.log('addShow(' + navn + ', ' + genre + ') lagt til med id ' + this.nextid);
+    //this.tvShows[this.nextid-1] = new TvShow(this.nextid, navn, genre);
+    this.tvShows.push(new TvShow(this.nextid, navn, genre));
+    console.log('addShow(' + navn + ', ' + genre + ') lagt til med id '
+        + this.nextid);
     this.nextid++;
     return this.getById(this.nextid-1);
+  }
+
+  deleteShow(id) {
+    console.log("deleteShow(" + id + ")");
+    //this.tvShows.splice(id,1);
+
+    const delIndex = this.tvShows.findIndex(
+        show => (show === undefined ? null : show.id) == id
+    );
+    if (delIndex >= 0) this.tvShows.splice(delIndex,1);
+    return null;
   }
 }
 

@@ -1,15 +1,77 @@
 <html>
 <head>
   <title>tvshows</title>
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1>tvshows</h1>
+  <h1>tvshows jQuery</h1>
 
+  <script type = "text/javascript" language = "javascript">
+    $(document).ready(function() {
+
+       $("#driver").click(function(event){
+         console.log("klikket");
+         test();
+       });
+
+       function test() {
+         console.log("test()");
+         $.get(
+            "/tvshow",
+            null,
+            function(data) {
+               $('#stage').html(JSON.stringify(data,null,'\t'));
+            }
+         );
+       }
+
+       $("#slett").click(function(event){
+         const deleteId = $("#delId").val();
+         console.log("slett(" + deleteId + ")");
+         if (deleteId == "") {
+            console.log("err!");
+            return false;
+          }
+         $.ajax({
+            url: '/tvshow/' + deleteId,
+            type: 'DELETE',
+            success: function(result) {
+                // Do something with the result
+                console.log("OK: result = " + result);
+                window.location = result;  // reload or redirect
+            }
+        });
+       });
+
+       test();
+
+    });
+
+
+ </script>
+
+ <p>Tilgjengelige tv-show:</p>
+
+ <span id = "stage" style = "background-color:#cc0;">
+    STAGE
+ </span>
+
+ <div><input type = "button" id = "driver"
+    value = "Load Data" /></div>
+
+    <hr/>
   <b>Sett inn nytt show</b>
   <form action="http://localhost:3000/tvshow" method="post">
     Navn: <input type="text" name="navn"><br/>
     Sjanger: <input type="text" name="genre"><br/>
-    <input type="submit" value="Lagre">
+    <input type="submit" name="action" value="Lagre"/>
+    <hr/>
+
+    <input type="button" name="action" value="Slett" id="slett" />
+    id: <input type="text" name="delId" id="delId" size="1">
   </form>
 </body>
 </html>
