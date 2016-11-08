@@ -43,8 +43,8 @@ tvShowRouter
       console.log("\n\npost('tvshow/'): " + request.body.action + " "
        + request.body.navn + ", " + request.body.genre );
       const newTvShow = tvserv.addShow(request.body.navn, request.body.genre);
-      //response.send(newTvShow);
-      response.redirect('/tvShows.html');
+      response.send(newTvShow);
+      //response.redirect('/tvShows.html');
     })
   // DELETE /tvshow/:id
   .delete('/:tvShowId', function(request, response) {

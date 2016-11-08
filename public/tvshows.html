@@ -13,41 +13,97 @@
     $(document).ready(function() {
 
        $("#driver").click(function(event){
-         console.log("klikket");
-         test();
+         oppdaterData();
        });
 
-       function test() {
-         console.log("test()");
+
+       function createTableRow(cells) {
+           var tds = cells.map(function (cellContent) {
+               return '<td>' + cellContent + '</td>';
+           }).join('');
+           return '<tr>' + tds + '</tr>';
+       }
+
+
+       function oppdaterData() {
+         console.log("oppdaterData()");
          $.get(
             "/tvshow",
             null,
             function(data) {
-               $('#stage').html(JSON.stringify(data,null,'\t'));
-            }
-         );
+
+              $('#stage').html(null);
+
+              if (data === undefined || data === null)
+                  return;
+               var tbl=$('<table></table>');
+
+               // lag header
+               var tr=$('<tr></tr>');
+               $.each(data[0], function(k, v){
+                   $('<th>'+k+'</th>').appendTo(tr);
+               });
+               tr.appendTo(tbl);
+
+               // lag (klikkbare) rader
+                $.each(data, function(key, val) {
+                    var tr=$('<tr class="tvshow" id=' + val.id + '></tr>');
+                    $.each(val, function(k, v){
+                        $('<td>'+v+'</td>').appendTo(tr);
+                    });
+                    tr.appendTo(tbl);
+                });
+
+                tbl.appendTo('#stage');
+            });
        }
+
+       $("tr").click(function(event) {
+          console.log("klikk");
+       });
+
+       $("#lagre").click(function(event){
+         console.log("lagre()");
+         const vname = $("#navn").val();
+         const vgenre = $("#genre").val();
+         const data = {
+           navn: vname,
+           genre: vgenre
+         };
+         $.ajax({
+            url: '/tvshow',
+            type: 'POST',
+            data: data,
+            success: function(result) {
+                console.log("OK: result = " + result);
+                oppdaterData();  // refresh view
+            }
+        });
+       });
 
        $("#slett").click(function(event){
          const deleteId = $("#delId").val();
          console.log("slett(" + deleteId + ")");
          if (deleteId == "") {
-            console.log("err!");
+            alert("Du må oppgi en ID for sletting");
             return false;
           }
          $.ajax({
             url: '/tvshow/' + deleteId,
             type: 'DELETE',
             success: function(result) {
-                // Do something with the result
                 console.log("OK: result = " + result);
-                window.location = result;  // reload or redirect
+                oppdaterData();
             }
         });
        });
 
-       test();
 
+
+
+
+       // initiell last
+       oppdaterData();
     });
 
 
@@ -55,19 +111,20 @@
 
  <p>Tilgjengelige tv-show:</p>
 
- <span id = "stage" style = "background-color:#cc0;">
-    STAGE
- </span>
+
+ <div id="stage" style="background-color:#cc0;">
+ </div>
 
  <div><input type = "button" id = "driver"
-    value = "Load Data" /></div>
+    value = "Oppfrisk" /></div>
 
     <hr/>
   <b>Sett inn nytt show</b>
-  <form action="http://localhost:3000/tvshow" method="post">
-    Navn: <input type="text" name="navn"><br/>
-    Sjanger: <input type="text" name="genre"><br/>
-    <input type="submit" name="action" value="Lagre"/>
+  <form>
+    ID: <span id="showID"></span><br/>
+    Navn: <input type="text" name="navn" id="navn"><br/>
+    Sjanger: <input type="text" name="genre" id="genre"><br/>
+    <input type="button" name="action" value="Lagre" id="lagre"/>
     <hr/>
 
     <input type="button" name="action" value="Slett" id="slett" />
