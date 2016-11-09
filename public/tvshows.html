@@ -12,18 +12,12 @@
   <script type = "text/javascript" language = "javascript">
     $(document).ready(function() {
 
+       let tvShows = [];
+
        $("#driver").click(function(event){
+         console.log("tvShows[] = " + tvShows);
          oppdaterData();
        });
-
-
-       function createTableRow(cells) {
-           var tds = cells.map(function (cellContent) {
-               return '<td>' + cellContent + '</td>';
-           }).join('');
-           return '<tr>' + tds + '</tr>';
-       }
-
 
        function oppdaterData() {
          console.log("oppdaterData()");
@@ -31,51 +25,98 @@
             "/tvshow",
             null,
             function(data) {
-
-              $('#stage').html(null);
-
-              if (data === undefined || data === null)
-                  return;
-               var tbl=$('<table></table>');
-
-               // lag header
-               var tr=$('<tr></tr>');
-               $.each(data[0], function(k, v){
-                   $('<th>'+k+'</th>').appendTo(tr);
-               });
-               tr.appendTo(tbl);
-
-               // lag (klikkbare) rader
-                $.each(data, function(key, val) {
-                    var tr=$('<tr class="tvshow" id=' + val.id + '></tr>');
-                    $.each(val, function(k, v){
-                        $('<td>'+v+'</td>').appendTo(tr);
-                    });
-                    tr.appendTo(tbl);
-                });
-
-                tbl.appendTo('#stage');
+              tvShows = data;
+              oppdaterView(data);
             });
        }
 
-       $("tr").click(function(event) {
-          console.log("klikk");
+       function oppdaterView(data) {
+
+         console.log("oppdaterView()");
+         $('#stage').html(null);
+         tvShows = data;
+
+         if (data === undefined || data === null) {
+             console.log("no data");
+             return;
+           }
+
+          var tbl=$('<table></table>');
+
+          // lag header
+          var tr=$('<tr></tr>');
+          $.each(data[0], function(k, v){
+              $('<th>'+k+'</th>').appendTo(tr);
+          });
+          tr.appendTo(tbl);
+
+          // lag (klikkbare) rader
+           $.each(data, function(key, val) {
+               var tr=$('<tr class="tvshow" id=' + val.id + '></tr>');
+               $.each(val, function(k, v){
+                   $('<td>'+v+'</td>').appendTo(tr);
+               });
+               tr.appendTo(tbl);
+           });
+
+           tbl.appendTo('#stage');
+       }
+
+       // click handler on TR elements delegated to parent
+       // element, <div id="stage">, since table is dynamically generated
+       $("#stage").on("click", 'tr.tvshow', function() {
+          console.log("klikk: " + $(this).attr("id"));
+          rediger($(this).attr("id"));
+       });
+
+       function rediger(id) {
+         let editShow = tvShows.find(show =>
+             (show === undefined ? null : show.id) == id)
+         $("#showID").text(editShow.id);
+         $("#navn").val(editShow.name);
+         $("#genre").val(editShow.genre);
+
+         $("#hjelpetekst").text("Rediger show");
+       }
+
+       $("#avbryt").click(function(event){
+         console.log("avbryt()");
+         $("#showID").text(null);
+         $("#navn").val(null);
+         $("#genre").val(null);
+
+         $("#hjelpetekst").text("Sett inn nytt show");
        });
 
        $("#lagre").click(function(event){
          console.log("lagre()");
+         const vid = $("#showID").text();
          const vname = $("#navn").val();
          const vgenre = $("#genre").val();
+
+         if (vname === null || vname === "") {
+           alert("Navn kan ikke være blankt");
+           return null;
+         }
+         
          const data = {
            navn: vname,
            genre: vgenre
          };
+
+         if (vid === null || vid === "") {
+           type = 'POST';
+           url = '/tvshow';
+         } else {
+           url = '/tvshow/' + vid;
+           type = 'PUT';
+         }
          $.ajax({
-            url: '/tvshow',
-            type: 'POST',
+            url: url,     //'/tvshow',
+            type: type,   //'POST',
             data: data,
             success: function(result) {
-                console.log("OK: result = " + result);
+                console.log(type + " OK: result = " + result);
                 oppdaterData();  // refresh view
             }
         });
@@ -103,7 +144,9 @@
 
 
        // initiell last
-       oppdaterData();
+       oppdaterData() ;
+
+
     });
 
 
@@ -111,19 +154,16 @@
 
  <p>Tilgjengelige tv-show:</p>
 
-
  <div id="stage" style="background-color:#cc0;">
  </div>
 
- <div><input type = "button" id = "driver"
-    value = "Oppfrisk" /></div>
-
     <hr/>
-  <b>Sett inn nytt show</b>
+  <b id="hjelpetekst">Sett inn nytt show</b>
   <form>
     ID: <span id="showID"></span><br/>
     Navn: <input type="text" name="navn" id="navn"><br/>
     Sjanger: <input type="text" name="genre" id="genre"><br/>
+    <input type="button" name="action" value="Avbryt" id="avbryt"/>
     <input type="button" name="action" value="Lagre" id="lagre"/>
     <hr/>
 

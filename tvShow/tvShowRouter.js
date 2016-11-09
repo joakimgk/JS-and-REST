@@ -46,11 +46,16 @@ tvShowRouter
       response.send(newTvShow);
       //response.redirect('/tvShows.html');
     })
+  .put('/:tvShowId', function(request, response) {
+      console.log("\n\nput('tvshow/:tvShowId'), ID: " + request.params.tvShowId);
+      const updTvShow = tvserv.updateShow(request.params.tvShowId, request.body.navn, request.body.genre);
+      response.send(updTvShow);
+    })
   // DELETE /tvshow/:id
   .delete('/:tvShowId', function(request, response) {
       console.log("\n\ndelete('tvshow/:tvShowId'), ID: " + request.params.tvShowId);
       tvserv.deleteShow(request.params.tvShowId);
-      response.send('/tvShows.html');
+      response.send(null);
     });
 
 // Remember to export the router

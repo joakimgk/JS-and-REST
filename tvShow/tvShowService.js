@@ -42,7 +42,7 @@ class TvShowService {
     let result = this.tvShows.find(show =>
         (show === undefined ? null : show.id) == id);
     if (result) return result;
-    else     console.log("NO MATCH");
+    else  return null;
   }
 
   addShow(navn, genre) {
@@ -52,6 +52,14 @@ class TvShowService {
         + this.nextid);
     this.nextid++;
     return this.getById(this.nextid-1);
+  }
+
+  updateShow(id, navn, genre) {
+    let tvshow = this.getById(id);
+    if (tvshow === null) return null;
+    tvshow.name = navn;
+    tvshow.genre = genre;
+    return tvshow;
   }
 
   deleteShow(id) {
