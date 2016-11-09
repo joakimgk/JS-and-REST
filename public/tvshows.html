@@ -15,7 +15,6 @@
        let tvShows = [];
 
        $("#driver").click(function(event){
-         console.log("tvShows[] = " + tvShows);
          oppdaterData();
        });
 
@@ -25,7 +24,6 @@
             "/tvshow",
             null,
             function(data) {
-              tvShows = data;
               oppdaterView(data);
             });
        }
@@ -65,7 +63,6 @@
        // click handler on TR elements delegated to parent
        // element, <div id="stage">, since table is dynamically generated
        $("#stage").on("click", 'tr.tvshow', function() {
-          console.log("klikk: " + $(this).attr("id"));
           rediger($(this).attr("id"));
        });
 
@@ -98,7 +95,7 @@
            alert("Navn kan ikke være blankt");
            return null;
          }
-         
+
          const data = {
            navn: vname,
            genre: vgenre
@@ -133,7 +130,6 @@
             url: '/tvshow/' + deleteId,
             type: 'DELETE',
             success: function(result) {
-                console.log("OK: result = " + result);
                 oppdaterData();
             }
         });
