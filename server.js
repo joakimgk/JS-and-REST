@@ -2,6 +2,7 @@ const express = require('express');  // import Express (JS) module
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const tvShowRouter = require('./tvShow/tvShowRouter');
+const reviewRouter = require('./tvShow/reviewRouter');
 
 const app = express();
 app.use(morgan('dev'));
@@ -22,7 +23,9 @@ app.get('/', function(request, response) {
 });
 
 // endpoint /tvShow served by tvShowRouter
+// and /review served by reviewRouter
 app.use('/tvShow', tvShowRouter);
+app.use('/review', reviewRouter);
 
 const port = 3000;
 app.listen(port, function() {

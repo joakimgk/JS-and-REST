@@ -4,9 +4,10 @@ const express = require('express');
 // TvShow.js -> require('TvShow'):
 const TvShow = require('./TvShow');
 */
+// tvShowService requires TvShow.js, so don't need to require it here
 const tvserv = require('./tvShowService');
 
-// create a new instance of an Express routerS
+// create a new instance of an Express router
 const tvShowRouter = express.Router();
 
 /*
