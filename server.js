@@ -2,7 +2,7 @@ const express = require('express');  // import Express (JS) module
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const tvShowRouter = require('./tvShow/tvShowRouter');
-const reviewRouter = require('./tvShow/reviewRouter');
+const reviewRouter = require('./review/reviewRouter');
 
 const app = express();
 app.use(morgan('dev'));

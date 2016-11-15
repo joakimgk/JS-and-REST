@@ -92,6 +92,37 @@
          $("#hjelpetekst").text("Sett inn nytt show");
        });
 
+
+       $("#lagre_review").click(function(event){
+         console.log("lagre_review()");
+         const vid = $("#showID_review").val();
+         const vreview = $("#reviewText").val();
+         const vscore = $("#score").val();
+
+         console.log(vid + ", " + vscore + ", " + vreview);
+
+         if (vreview === null || vreview === "") {
+           alert("Tekstfelt kan ikke være blankt");
+           return null;
+         }
+
+         const data = {
+           content: vreview,
+           score: vscore,
+           relatedItemId: vid
+         };
+
+         $.ajax({
+            url: '/review',
+            type: 'POST',
+            data: data,
+            success: function(result) {
+                console.log("POST OK: result = " + result);
+                //oppdaterData();  // refresh view
+            }
+        });
+       });
+
        $("#lagre").click(function(event){
          console.log("lagre()");
          const vid = $("#showID").text();
@@ -178,8 +209,17 @@
   <hr/>
   <div id="review" style="display: none;">
     <b>Legg til en omtale</b><br/>
-    for <span id="revName"></span><br/>
-    <textarea name="review" id="reviewText" cols="45" rows="6" wrap="soft"></textarea>
+    for <span id="revName"></span>
+    <input type="hidden" name="showID_review" id="showID_review"/><br/>
+    <textarea name="review" id="reviewText" cols="45" rows="6" wrap="soft"></textarea><br/>
+    Score: <select name="score" id="score">
+      <option value=1>1</option>
+      <option value=2>2</option>
+      <option value=3>3</option>
+      <option value=4>4</option>
+      <option value=5>5</option>
+    </select>
+    <input type="button" name="action" value="Lagre" id="lagre_review"/>
   </div>
   </form>
 </body>

@@ -1,4 +1,4 @@
-const TvShow = require('./Review');
+const Review = require('./Review');
 
 
 // class that has a TV shows array, and a getALl() method to return it
@@ -16,7 +16,7 @@ class ReviewService {
   // uses ES6 find() to return show by ID
   getById(id) {
     console.log("getById(" + id + ")");
-    let result = this.reviews.find(show =>
+    let result = this.reviews.find(review =>
         (review === undefined ? null : review.id) == id);
     if (result) return result;
     else return null;

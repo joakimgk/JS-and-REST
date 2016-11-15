@@ -27,8 +27,8 @@ reviewRouter.get('/:reviewId', function(request, response) {
 reviewRouter
 
   .post('/', function(request, response) {
-      console.log("\n\npost('review/'): " + request.body.action + " "
-       + request.body.navn + ", " + request.body.genre );
+      console.log("\n\npost('review/'): " +
+       + request.body.relatedItemId + ", " + request.body.score + ", " + request.body.content );
       const newReview = revserv.addReview(request.body.content, request.body.score, request.body.relatedItemId);
       response.send(newReview);
     })
